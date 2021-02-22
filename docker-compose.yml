@@ -1,6 +1,6 @@
 services:
   database:
-    image: postgres
+    image: postgres:latest
     environment:
       - POSTGRES_PASSWORD=password
     # TO OPEN DATABASE TO HOST
@@ -10,7 +10,7 @@ services:
       - postgresData:/var/lib/postgresql/data
 
   tanatloc:
-    image: tanatloc/tanatloc
+    image: tanatloc/tanatloc:latest
     depends_on:
       - database
     environment:
@@ -22,14 +22,14 @@ services:
       - tanatlocData:/root/tanatloc
 
   network:
-    image: nginx
+    image: nginx:latest
     depends_on:
       - tanatloc
     ports:
-      - '80:80'
-      - '443:443'
+      - "80:80"
+      - "443:443"
     volumes:
-      - ./docker/nginx.conf:/etc/nginx/nginx.conf
+      - ./docker/run.nginx.conf:/etc/nginx/nginx.conf
       - /etc/letsencrypt:/etc/letsencrypt
 
 volumes:

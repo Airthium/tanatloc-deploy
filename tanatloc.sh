@@ -37,7 +37,7 @@ else
     then
         if [ "$option" = "backup" ]
         then
-            docker run -it -v tanatloc-ssr_tanatlocData:/data -v $dataBackup/backup_$(date +%Y-%m-%d):/backup ubuntu tar cvfP /backup/backup.tar /data
+            docker run -it -v tanatloc-ssr_tanatlocData:/data -v $dataBackup:/backup ubuntu tar cvfP /backup/backup-$(date +%Y-%m-%d).tar /data
         else
             echo "Unknown value ${value}. Please see tanaloc.sh --help."
         fi

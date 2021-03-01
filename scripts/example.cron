@@ -1,0 +1,3 @@
+PATH=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin
+@reboot /bin/bash /media/tanatloc/tanatloc-ssr-deploy/scripts/cron_start.sh > /media/tanatloc/cron.log 2>&1
+* * * * * /bin/bash /media/tanatloc/tanatloc-ssr-deploy/scripts/cron_backup.sh > /media/backup/cron.log 2>&1

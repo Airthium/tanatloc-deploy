@@ -62,21 +62,32 @@ else
     elif [ "$action" = "clean" ]
     then
         docker image prune -f
+    elif [ "$action" = "run" ]
+    then
+        if [ "$option" = "database" ]
+        then
+            docker-compose run database psql -U postgres -h database
+        else
+            echo "Unknown option ${option}. Please see tanaloc.sh --help."
+        fi
     elif [ "$action" = "help" ]
     then
         echo "tanatloc.sh action [option] [value]"
 
         echo "List of actions:"
-        echo " - set (need option and value)"
-        echo " - db (need option)"
-        echo " - start. Start the Tanatloc server"
-        echo " - stop. Stop the Tanatloc server"
-        echo " - update. Update the Tanatloc server"
-        echo " - clean. Clean old docker images"
+        echo " - set (need option and value);"
+        echo " - db (need option);"
+        echo " - data (need option);"
+        echo " - start. Start the Tanatloc server;"
+        echo " - stop. Stop the Tanatloc server;"
+        echo " - update. Update the Tanatloc server;"
+        echo " - clean. Clean old docker images;"
+        echo " - run (need option)."
 
         echo "List of options:"
-        echo ' - domain, need value. Set a custom domain. The value must start with http:// or https://.'
-        echo ' - backup. Backup data or database'
+        echo ' - [set] domain, need value. Set a custom domain. The value must start with http:// or https://;'
+        echo ' - [db, data] backup. Backup database or data;'
+        echo ' - [run] database. Start database.'
     else
         echo "Unknown action ${action}. Please see tanaloc.sh --help."
     fi

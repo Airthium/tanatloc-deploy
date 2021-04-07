@@ -1,6 +1,7 @@
 services:
   database:
     image: postgres:latest
+    restart: always
     environment:
       - POSTGRES_PASSWORD=password
     # TO OPEN DATABASE TO HOST
@@ -11,6 +12,7 @@ services:
 
   tanatloc:
     image: tanatloc/tanatloc:latest
+    restart: always
     depends_on:
       - database
     environment:
@@ -23,6 +25,7 @@ services:
 
   network:
     image: nginx:latest
+    restart: always
     depends_on:
       - tanatloc
     ports:

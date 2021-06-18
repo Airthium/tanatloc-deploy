@@ -31,6 +31,7 @@ else
         then
             docker-compose run -e PGPASSWORD="password" database pg_dump -h database -U postgres tanatloc2 > ${dbBackup}/dump-$(date +%Y-%m-%d).sql
         elif [ "$option" = "run" ]
+        then
             docker run -it -v tanatloc-ssr-deploy_tanatlocData:/data ubuntu /bin/bash
         else
             echo "Unknown value ${value}. Please see tanaloc.sh --help."
@@ -41,6 +42,7 @@ else
         then
             docker run -v tanatloc-ssr-deploy_tanatlocData:/data -v $dataBackup:/backup ubuntu tar cvfP /backup/backup-$(date +%Y-%m-%d).tar /data
         elif [ "$option" = "run" ]
+        then
             docker-compose run database psql -U postgres -h database
         else
             echo "Unknown value ${value}. Please see tanaloc.sh --help."

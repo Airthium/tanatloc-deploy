@@ -30,6 +30,8 @@ else
         if [ "$option" = "backup" ]
         then
             docker-compose run -e PGPASSWORD="password" database pg_dump -h database -U postgres tanatloc2 > ${dbBackup}/dump-$(date +%Y-%m-%d).sql
+        elif [ "$option" = "run" ]
+            docker run -it -v tanatloc-ssr-deploy_tanatlocData:/data ubuntu /bin/bash
         else
             echo "Unknown value ${value}. Please see tanaloc.sh --help."
         fi
@@ -38,6 +40,8 @@ else
         if [ "$option" = "backup" ]
         then
             docker run -v tanatloc-ssr-deploy_tanatlocData:/data -v $dataBackup:/backup ubuntu tar cvfP /backup/backup-$(date +%Y-%m-%d).tar /data
+        elif [ "$option" = "run" ]
+            docker-compose run database psql -U postgres -h database
         else
             echo "Unknown value ${value}. Please see tanaloc.sh --help."
         fi
@@ -62,14 +66,6 @@ else
     elif [ "$action" = "clean" ]
     then
         docker image prune -f
-    elif [ "$action" = "run" ]
-    then
-        if [ "$option" = "database" ]
-        then
-            docker-compose run database psql -U postgres -h database
-        else
-            echo "Unknown option ${option}. Please see tanaloc.sh --help."
-        fi
     elif [ "$action" = "help" ]
     then
         echo "tanatloc.sh action [option] [value]"
@@ -87,7 +83,7 @@ else
         echo "List of options:"
         echo ' - [set] domain, need value. Set a custom domain. The value must start with http:// or https://;'
         echo ' - [db, data] backup. Backup database or data;'
-        echo ' - [run] database. Start database.'
+        echo ' - [db, data] run. Run database or data docker.'
     else
         echo "Unknown action ${action}. Please see tanaloc.sh --help."
     fi

@@ -67,7 +67,9 @@ else
         docker-compose up -d --remove-orphans
     elif [ "$action" = "clean" ]
     then
-        docker image prune -f
+        docker rmi $(docker image ls --filter reference="tanatloc/tanatloc" --quiet | tail -1)
+        docker rmi $(docker image ls --filter reference="postgres" --quiet | tail -1)
+        docker rmi $(docker image ls --filter reference="nginx" --quiet | tail -1)
     elif [ "$action" = "help" ]
     then
         echo "tanatloc.sh action [option] [value]"

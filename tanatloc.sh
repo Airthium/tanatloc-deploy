@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Backup location
 dbBackup=/media/backup/db
@@ -9,87 +9,157 @@ action=$1
 option=$2
 value=$3
 
-## Tanatloc
+# Help
+Red='\033[0;31m'
+Off='\033[0m'
+function help {
+    Green='\033[0;32m'
+    Yellow='\033[0;33m'
+    Blue='\033[0;34m'
+    Purple='\033[0;35m'
+    Cyan='\033[0;36m'
 
+    echo -e ""
+    echo -e "Usage: tanatloc.sh ${Cyan}action ${Purple}[option] [value]${Off}"
+    echo -e ""
+    echo -e "List of ${Cyan}actions${Off}:"
+    echo -e " - ${Cyan}set${Off}"
+    echo -e "   need option and value"
+    echo -e " - ${Cyan}db${Off}"
+    echo -e "   need option"
+    echo -e " - ${Cyan}data${Off}"
+    echo -e "   need option"
+    echo -e " - ${Cyan}start${Off}"
+    echo -e "   Start the Tanatloc server"
+    echo -e " - ${Cyan}stop${Off}"
+    echo -e "   Stop the Tanatloc server"
+    echo -e " - ${Cyan}update${Off}"
+    echo -e "   Update the Tanatloc server"
+    echo -e " - ${Cyan}clean${Off}"
+    echo -e "   Clean old docker images"
+    echo -e " - ${Cyan}run${Off}"
+    echo -e "   need option"
+    echo -e ""
+    echo -e "List of ${Purple}options${Off}:"
+    echo -e " - [${Cyan}set${Off}] ${Purple}domain${Off}"
+    echo -e "   need a value"
+    echo -e "   Set a custom domain. The value must start with http:// or https://:"
+    echo -e " - [${Cyan}set${Off}] ${Purple}storage${Off}"
+    echo -e "   need a value"
+    echo -e "   Set a custom storage. The path must be absolute"
+    echo -e " - [${Cyan}db${Off}, ${Cyan}data${Off}] ${Purple}backup${Off}"
+    echo -e "   Backup database or data"
+    echo -e " - [${Cyan}db${Off}, ${Cyan}data${Off}] ${Purple}run${Off}"
+    echo -e "   Run database or data docker"
+    echo -e ""
+}
+
+# Error
+function error {
+    echo -e "${Red}$1${Off}"
+    help
+    exit -1
+}
+
+## Tanatloc
 if [ $# -eq 0 ]
 then
-    echo "Usage: tanatloc.sh action [option] [value]"
-    echo "Try tanatloc.sh help"
+    help
 else
-
+    ### Set
     if [ "$action" = "set" ]
     then
-        if [ "$option" = "domain" ]
+        if [ ! -n "$option" ]
         then
-            sh scripts/domain.sh $value
+            error "Undefined or empty option"
+        elif [ "$option" = "domain" ]
+        then
+            if [ -n "$value" ]
+            then
+                sh scripts/domain.sh $value
+                echo "DOMAIN=\"$value\"" >> .env
+            else
+                error "Undefined or empty value"
+            fi
+        elif [ "$option" = "storage" ]
+        then
+            if [ -n "$value" ]
+            then
+                sh scripts/storage.sh $value
+            else
+                error "Undefined or empty value"
+            fi
         else
-            echo "Unknown value ${value}. Please see tanaloc.sh --help."
+            error "Unknown option ${option}"
         fi
+    ### dB
     elif [ "$action" = "db" ]
     then
-        if [ "$option" = "backup" ]
+        if [ ! -n "$option" ]
+        then
+            error "Undefined or empty option"
+        elif [ "$option" = "backup" ]
         then
             docker-compose run -e PGPASSWORD="password" database pg_dump -h database -U postgres tanatloc2 > ${dbBackup}/dump-$(date +%Y-%m-%d).sql
         elif [ "$option" = "run" ]
         then
             docker-compose run database psql -U postgres -h database
         else
-            echo "Unknown value ${value}. Please see tanaloc.sh --help."
+            error "Unknown option ${option}"
         fi
+    ### Data
     elif [ "$action" = "data" ]
     then
-        if [ "$option" = "backup" ]
+        if [ ! -n "$option" ]
+        then
+            error "Undefined or empty option"
+        elif [ "$option" = "backup" ]
         then
             docker run -v tanatloc-ssr-deploy_tanatlocData:/data -v $dataBackup:/backup ubuntu tar cvfP /backup/backup-$(date +%Y-%m-%d).tar /data
         elif [ "$option" = "run" ]
         then
             docker run -it -v tanatloc-ssr-deploy_tanatlocData:/data ubuntu /bin/bash
         else
-            echo "Unknown value ${value}. Please see tanaloc.sh --help."
+            error "Unknown option ${option}"
         fi
+    ### Start
     elif [ "$action" = "start" ]
     then
+        if [ ! -f docker-compose.yml ]
+        then
+            cp conf/docker-compose.yml docker-compose.yml
+        fi
         if [ ! -f docker/run.nginx.conf ]
         then
             cp docker/nginx.conf docker/run.nginx.conf
         fi
-        docker-compose start
+        docker-compose up -d --remove-orphans
+    ### Restart
     elif [ "$action" = "restart" ]
     then
         docker-compose restart
+    ### Stop
     elif [ "$action" = "stop" ]
     then
         docker-compose stop
+    ### Update
     elif [ "$action" = "update" ]
     then
         docker-compose pull
         docker-compose stop
         docker-compose up -d --remove-orphans
+    ### Clean
     elif [ "$action" = "clean" ]
     then
         docker rmi $(docker image ls --filter reference="tanatloc/tanatloc" --quiet | tail -n +2)
         docker rmi $(docker image ls --filter reference="postgres" --quiet | tail -n +2)
         docker rmi $(docker image ls --filter reference="nginx" --quiet | tail -n +2)
+    ### Help
     elif [ "$action" = "help" ]
     then
-        echo "tanatloc.sh action [option] [value]"
-
-        echo "List of actions:"
-        echo " - set (need option and value);"
-        echo " - db (need option);"
-        echo " - data (need option);"
-        echo " - start. Start the Tanatloc server;"
-        echo " - stop. Stop the Tanatloc server;"
-        echo " - update. Update the Tanatloc server;"
-        echo " - clean. Clean old docker images;"
-        echo " - run (need option)."
-
-        echo "List of options:"
-        echo ' - [set] domain, need value. Set a custom domain. The value must start with http:// or https://;'
-        echo ' - [db, data] backup. Backup database or data;'
-        echo ' - [db, data] run. Run database or data docker.'
+        help
+    ### Error
     else
-        echo "Unknown action ${action}. Please see tanaloc.sh --help."
+        error "Unknown action ${action}"
     fi
-
 fi

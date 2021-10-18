@@ -1,3 +1,11 @@
 # Tanatloc (SSR) deployment
 
-Refer to the [wiki page](https://github.com/Airthium/tanatloc-ssr-deploy/wiki) for deployment instructions.
+## Set domain
+
+```
+sh tanatloc.sh set domain https://domain.com
+```
+
+## Set storage folder
+
+//TODO

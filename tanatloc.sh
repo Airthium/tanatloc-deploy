@@ -39,6 +39,8 @@ function help {
     echo -e "   Clean old docker images"
     echo -e " - ${Cyan}run${Off}"
     echo -e "   need option"
+    echo -e " - ${Cyan}renew${Off}"
+    echo -e " - need option"
     echo -e ""
     echo -e "List of ${Purple}options${Off}:"
     echo -e " - [${Cyan}set${Off}] ${Purple}domain${Off}"
@@ -51,6 +53,8 @@ function help {
     echo -e "   Backup database or data"
     echo -e " - [${Cyan}db${Off}, ${Cyan}data${Off}] ${Purple}run${Off}"
     echo -e "   Run database or data docker"
+    echo -e " - [${Cyan}renew${Off}] ${Purple}certificate${Off}"
+    echo -e "   Renew the SSL certificate"
     echo -e ""
 }
 
@@ -154,6 +158,10 @@ else
         docker rmi $(docker image ls --filter reference="tanatloc/tanatloc" --quiet | tail -n +2)
         docker rmi $(docker image ls --filter reference="postgres" --quiet | tail -n +2)
         docker rmi $(docker image ls --filter reference="nginx" --quiet | tail -n +2)
+    ### Renew
+    elif [ "$action" = "renew" ]
+    then
+        sh scripts/cert-renew.sh
     ### Help
     elif [ "$action" = "help" ]
     then

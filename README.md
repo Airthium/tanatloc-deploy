@@ -1,5 +1,7 @@
 # Tanatloc (SSR) deployment
 
+[Wiki](https://github.com/Airthium/tanatloc-ssr-deploy/wiki)
+
 ## Before start
 
 ### Set domain

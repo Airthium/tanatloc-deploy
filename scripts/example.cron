@@ -1,4 +1,4 @@
 PATH=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin
-@reboot /bin/bash /media/tanatloc/tanatloc-ssr-deploy/scripts/cron_start.sh > /media/tanatloc/cron.log 2>&1
-0 0 * * 0 /bin/bash /media/tanatloc/tanatloc-ssr-deploy/scripts/cron_backup.sh > /media/backup/cron.log 2>&1
-0 1 * * 0 /bin/bash /media/tanatloc/tanatloc-ssr-deploy/scripts/cron_certbot.sh > /media/tanatloc/certbot.log 2>&1
+@reboot /bin/bash /media/tanatloc/tanatloc-deploy/scripts/cron_start.sh > /media/tanatloc/cron.log 2>&1
+0 0 * * 0 /bin/bash /media/tanatloc/tanatloc-deploy/scripts/cron_backup.sh > /media/backup/cron.log 2>&1
+0 1 * * 0 /bin/bash /media/tanatloc/tanatloc-deploy/scripts/cron_certbot.sh > /media/tanatloc/certbot.log 2>&1

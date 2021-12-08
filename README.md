@@ -1,6 +1,6 @@
 # Tanatloc (SSR) deployment
 
-Pre-installation steps: see the [Wiki](https://github.com/Airthium/tanatloc-ssr-deploy/wiki)
+Pre-installation steps: see the [Wiki](https://github.com/Airthium/tanatloc-deploy/wiki)
 
 ## Options
 

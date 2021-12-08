@@ -211,12 +211,12 @@ else
         #### Backup
         if [ "$option" = "backup" ]
         then
-            docker run -v tanatloc-ssr-deploy_tanatlocData:/data -v $dataBackup:/backup ubuntu tar cvfP /backup/backup-$(date +%Y-%m-%d).tar /data
+            docker run -v tanatloc-deploy_tanatlocData:/data -v $dataBackup:/backup ubuntu tar cvfP /backup/backup-$(date +%Y-%m-%d).tar /data
         
         #### Run
         elif [ "$option" = "run" ]
         then
-            docker run -it -v tanatloc-ssr-deploy_tanatlocData:/data ubuntu /bin/bash
+            docker run -it -v tanatloc-deploy_tanatlocData:/data ubuntu /bin/bash
         
         #### Unknown
         else

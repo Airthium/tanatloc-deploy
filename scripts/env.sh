@@ -10,4 +10,4 @@ then
 fi
 
 ## Modify key/value
-sed -i "/^${key}/s/=.*$/=${value}/" .env
+sed -i "/^${key} /s/= .*$/= ${value}/" .env

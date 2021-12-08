@@ -2,66 +2,138 @@
 
 Pre-installation steps: see the [Wiki](https://github.com/Airthium/tanatloc-ssr-deploy/wiki)
 
-## Before start
+## Options
 
-### Set domain
+### Set
+
+#### Tanatloc tag
+
+Default: `latest`
+
+```
+sh tanatloc.sh set tanatloc_tag latest
+```
+
+#### Database password
+
+Default: `password`
+
+```
+sh tanatloc.sh set database_password password
+```
+
+#### Database port
+
+Default: `5432`
+
+```
+sh tanatloc.sh set database_port 5432
+```
+
+#### Domain
+
+Default: Empty
 
 ```
 sh tanatloc.sh set domain https://domain.com
 ```
 
-If the domain name starts with `https`, an SSL certificate is build using `certbot`.
+If the domain name starts with `https`, an SSL certificate will be build using `certbot`.
 
 If you want to renew the certificate, use `sh tanatloc.sh renew certificate`.
 
-### Set storage folder
+#### HTTP port
+
+Default: `80`
+
+```
+sh tanatloc.sh set http_port 80
+```
+
+#### HTTPS port
+
+Default: `443`
+
+```
+sh tanatloc.sh set https_port 443
+```
+
+#### Storage folder
 
 ```
 sh tanatloc.sh set storage /absolute/path
 ```
 
-## Start
+You must specify an absolute path
+
+### Database
+
+#### Backup
 
 ```
-sh tanatloc.sh start
+sh tanatloc.sh database backup
 ```
 
-## Stop
+#### Run
 
 ```
-sh tanatloc.sh stop
+sh tanatloc.sh database run
 ```
 
-## Update
+### Data
+
+#### Backup
+
+For docker volume only
 
 ```
-sh tanatloc.sh update
+sh tanatloc.sh data backup
 ```
 
-## Database tools
-
-Access database:
-
-```
-sh tanatloc.sh db run
-```
-
-Backup:
-
-```
-sh tanatloc.sh db backup
-```
-
-## Data tools
-
-Access data (if stored in a docker volume):
+#### Run
 
 ```
 sh tanatloc.sh data run
 ```
 
-Backup (if stored in a docker volume):
+### Start
 
 ```
-sh tanatloc.sh data backup
+sh tanatloc.sh start
 ```
+
+### Stop
+
+```
+sh tanatloc.sh stop
+```
+
+### Update
+
+```
+sh tanatloc.sh update
+```
+
+### Log
+
+```
+sh tanatloc.sh log
+```
+
+### Clean
+
+```
+sh tanatloc.sh clean
+```
+
+Clean old docker images
+
+### Renew
+
+#### Certificate
+
+```
+sh tanatloc.sh renew certificate
+```
+
+Renew the SSL certificate

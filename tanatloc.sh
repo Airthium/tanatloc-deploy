@@ -27,7 +27,7 @@ function help {
     echo -e "   display log"
     echo -e " - ${Cyan}set${Off}"
     echo -e "   need option and value"
-    echo -e " - ${Cyan}db${Off}"
+    echo -e " - ${Cyan}database${Off}"
     echo -e "   need option"
     echo -e " - ${Cyan}data${Off}"
     echo -e "   need option"
@@ -66,9 +66,9 @@ function help {
     echo -e " - [${Cyan}set${Off}] ${Purple}storage${Off}"
     echo -e "   need a value"
     echo -e "   Set a custom storage using a path. The path must be absolute"
-    echo -e " - [${Cyan}db${Off}, ${Cyan}data${Off}] ${Purple}backup${Off}"
+    echo -e " - [${Cyan}database${Off}, ${Cyan}data${Off}] ${Purple}backup${Off}"
     echo -e "   Backup database or data"
-    echo -e " - [${Cyan}db${Off}, ${Cyan}data${Off}] ${Purple}run${Off}"
+    echo -e " - [${Cyan}database${Off}, ${Cyan}data${Off}] ${Purple}run${Off}"
     echo -e "   Run database or data docker"
     echo -e " - [${Cyan}renew${Off}] ${Purple}certificate${Off}"
     echo -e "   Renew the SSL certificate"
@@ -181,7 +181,7 @@ else
         fi
 
     ### Database
-    elif [ "$action" = "db" ]
+    elif [ "$action" = "database" ]
     then
         checkEnv
         checkOption $option
@@ -274,7 +274,12 @@ else
     ### Renew
     elif [ "$action" = "renew" ]
     then
-        sh scripts/cert-renew.sh
+        checkOption $option
+
+        if [ "$option" = "certificate" ]
+        then
+            sh scripts/cert-renew.sh
+        fi
         
     ### Help
     elif [ "$action" = "help" ]

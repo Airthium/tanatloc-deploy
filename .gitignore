@@ -1,3 +1,2 @@
 docker/run.nginx.conf
 .env
-./docker-compose.yml

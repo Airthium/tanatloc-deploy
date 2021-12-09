@@ -3,6 +3,9 @@
 key=$1
 value=$2
 
+echo $key
+echo $value
+
 ## Check .env file
 if [ ! -f .env ]
 then
@@ -10,4 +13,4 @@ then
 fi
 
 ## Modify key/value
-sed -i "/^${key} /s/= .*$/= ${value}/" .env
+sed -i "/^${key} /s|= .*$|= ${value}|" .env

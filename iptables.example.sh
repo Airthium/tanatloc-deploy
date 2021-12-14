@@ -24,10 +24,10 @@ echo "Allow $VPN"
 sudo iptables -A DOCKER -d $dockerip ! -i $interface -o $outinterface -p tcp -m tcp --dport 443 -s $VPN -j ACCEPT
 sudo iptables -A DOCKER -d $dockerip ! -i $interface -o $outinterface -p tcp -m tcp --dport 80 -s $VPN -j ACCEPT
 
-for ip in ${allowlist[@]};
+for ip in "${allowlist[@]}";
 do
 	echo "Allow $ip"
-	sudo iptables -A DOCKER -d $dockerip ! -i $interface -o $outinterface -p tcp -m tcp --dport 443 -s $ip -j ACCEPT
-	sudo iptables -A DOCKER -d $dockerip ! -i $interface -o $outinterface -p tcp -m tcp --dport 80 -s $ip -j ACCEPT
+	sudo iptables -A DOCKER -d $dockerip ! -i $interface -o $outinterface -p tcp -m tcp --dport 443 -s "$ip" -j ACCEPT
+	sudo iptables -A DOCKER -d $dockerip ! -i $interface -o $outinterface -p tcp -m tcp --dport 80 -s "$ip" -j ACCEPT
 done
 

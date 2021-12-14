@@ -1,16 +1,18 @@
 #!/bin/bash
 
-domain=`grep -oP "server_name\s+\K\w+" docker/run.nginx.conf | head -1`
+domain=$(grep -oP "server_name\s+\K\w+" docker/run.nginx.conf | head -1)
 echo "Renew certificate for $domain"
 
-certbot=`certbot --version`
+cleanDomain=$(echo "$domain" | cut -d "/" -f 3)
+
+certbot=$(certbot --version)
 if [ -n "$certbot" ]
 then
     echo "Stop Tanatloc"
     bash tanatloc.sh stop
 
     echo "Build certificates"
-    sudo certbot renew --cert-name $domain
+    sudo certbot renew --cert-name "$domain"
 
     echo "Restart Tanatloc"
     bash tanatloc.sh start

@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# Backup location
-dbBackup=/media/backup/db
-dataBackup=/media/backup/data
-
 # Arguments
 action=$1
 option=$2
@@ -13,9 +9,9 @@ value=$3
 Red='\033[0;31m'
 Off='\033[0m'
 function help {
-    Green='\033[0;32m'
-    Yellow='\033[0;33m'
-    Blue='\033[0;34m'
+    # Green='\033[0;32m'
+    # Yellow='\033[0;33m'
+    # Blue='\033[0;34m'
     Purple='\033[0;35m'
     Cyan='\033[0;36m'
 
@@ -88,7 +84,7 @@ function checkEnv {
 
 # Check option
 function checkOption {
-    if [ ! -n "$1" ]
+    if [ -z "$1" ]
     then
         error "Undefined or empty option"
     fi
@@ -96,7 +92,7 @@ function checkOption {
 
 # Check value
 function checkValue {
-    if [ ! -n "$1" ]
+    if [ -z "$1" ]
     then
         error "Undefined or empty value"
     fi
@@ -106,17 +102,17 @@ function checkValue {
 function error {
     echo -e "${Red}$1${Off}"
     help
-    exit -1
+    exit 1
 }
 
 ## env file
 if [ -f .env ]
 then
-    env=`grep -v '^#' .env`
-    env=`echo "$env" | sed "s/ //g"` # Remove space
-    env=`echo "$env" | sed -r '/^\s*$/d'` # Remove blank line
+    env=$(grep -v '^#' .env)
+    env=$(echo "$env" | sed "s/ //g") # Remove space
+    env=$(echo "$env" | sed -r '/^\s*$/d') # Remove blank line
     
-    export $(echo "$env" | xargs)
+    export "$(echo "$env" | xargs)"
 fi
 
 ## Tanatloc
@@ -135,65 +131,65 @@ else
     ### Set
     elif [ "$action" = "set" ]
     then
-        checkOption $option
+        checkOption "$option"
 
         #### Tanatloc tag
         if [ "$option" = "tanatloc_tag" ]
         then
-            checkValue $value
+            checkValue "$value"
 
-            sh scripts/env.sh TANATLOC_TAG $value
+            sh scripts/env.sh TANATLOC_TAG "$value"
         
         #### Database password
         elif [ "$option" = "database_password" ]
         then
-            checkValue $value
+            checkValue "$value"
 
-            sh scripts/env.sh DATABASE_PASSWORD $value
+            sh scripts/env.sh DATABASE_PASSWORD "$value"
         
         #### Database backup
         elif [ "$option" = "database_backup" ]
         then
-            checkValue $value
+            checkValue "$value"
 
-            sh scripts/env.sh DATABASE_BACKUP_PATH $value
+            sh scripts/env.sh DATABASE_BACKUP_PATH "$value"
 
         #### Domain
         elif [ "$option" = "domain" ]
         then
-            checkValue $value
+            checkValue "$value"
             
-            sh scripts/domain.sh $value
-            sh scripts/env.sh DOMAIN $value
+            sh scripts/domain.sh "$value"
+            sh scripts/env.sh DOMAIN "$value"
 
         #### HTTP port
         elif [ "$option" = "http_port" ]
         then
-            checkValue $value
+            checkValue "$value"
 
-            sh scripts/env.sh NGINX_HTTP $value
+            sh scripts/env.sh NGINX_HTTP "$value"
 
         #### HTTPS port
         elif [ "$option" = "https_port" ]
         then
-            checkValue $value
+            checkValue "$value"
 
-            sh scripts/env.sh NGINX_HTTPS $value
+            sh scripts/env.sh NGINX_HTTPS "$value"
 
         #### Storage
         elif [ "$option" = "storage" ]
         then
-            checkValue $value
+            checkValue "$value"
             
-            sh scripts/env.sh STORAGE_TYPE bind
-            sh scripts/env.sh STORAGE_PATH $value
+            sh scripts/env.sh STORAGE_TYPE "bind"
+            sh scripts/env.sh STORAGE_PATH "$value"
         
         #### Storage backup
         elif [ "$option" = "storage_backup" ]
         then
-            checkValue $value
+            checkValue "$value"
 
-            sh scripts/env.sh STORAGE_BACKUP_PATH $value
+            sh scripts/env.sh STORAGE_BACKUP_PATH "$value"
 
         #### Unknown
         else
@@ -204,12 +200,12 @@ else
     elif [ "$action" = "database" ]
     then
         checkEnv
-        checkOption $option
+        checkOption "$option"
 
         #### Backup
         if [ "$option" = "backup" ]
         then
-            docker-compose run -e PGPASSWORD="password" database pg_dump -h database -U postgres tanatloc2 > ${dbBackup}/dump-$(date +%Y-%m-%d).sql
+            docker-compose run -e PGPASSWORD="password" database pg_dump -h database -U postgres tanatloc2 > "$DATABASE_BACKUP_PATH/dump-$(date +%Y-%m-%d).sql"
 
         #### Run
         elif [ "$option" = "run" ]
@@ -226,12 +222,12 @@ else
     elif [ "$action" = "data" ]
     then
         checkEnv
-        checkOption $option
+        checkOption "$option"
         
         #### Backup
         if [ "$option" = "backup" ]
         then
-            docker run -v tanatloc-deploy_tanatlocData:/data -v $dataBackup:/backup ubuntu tar cvfP /backup/backup-$(date +%Y-%m-%d).tar /data
+            docker run -v tanatloc-deploy_tanatlocData:/data -v "$STORAGE_BACKUP_PATH:/backup" ubuntu tar cvfP "/backup/backup-$(date +%Y-%m-%d).tar" /data
         
         #### Run
         elif [ "$option" = "run" ]
@@ -287,14 +283,14 @@ else
     ### Clean
     elif [ "$action" = "clean" ]
     then
-        docker rmi $(docker image ls --filter reference="tanatloc/tanatloc" --quiet | tail -n +2)
-        docker rmi $(docker image ls --filter reference="postgres" --quiet | tail -n +2)
-        docker rmi $(docker image ls --filter reference="nginx" --quiet | tail -n +2)
+        docker rmi "$(docker image ls --filter reference="tanatloc/tanatloc" --quiet | tail -n +2)"
+        docker rmi "$(docker image ls --filter reference="postgres" --quiet | tail -n +2)"
+        docker rmi "$(docker image ls --filter reference="nginx" --quiet | tail -n +2)"
 
     ### Renew
     elif [ "$action" = "renew" ]
     then
-        checkOption $option
+        checkOption "$option"
 
         if [ "$option" = "certificate" ]
         then

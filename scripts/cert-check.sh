@@ -1,13 +1,13 @@
 #!/bin/bash
 
-domain=`grep -oP "server_name\s+\K\w+" docker/run.nginx.conf | head -1`
-cert_date=`openssl x509 -dates -noout -in /etc/letsencrypt/live/${domain}/fullchain.pem | grep -oP "notAfter=\s+\K\w+"`
+domain=$(grep -oP "server_name\s+\K\w+" docker/run.nginx.conf | head -1)
+cert_date=$(openssl x509 -dates -noout -in "/etc/letsencrypt/live/${domain}/fullchain.pem" | grep -oP "notAfter=\s+\K\w+")
 
-date=`date +%s -d "${cert_date}"`
+date=$(date +%s -d "${cert_date}")
 
-today=`date +%s`
+today=$(date +%s)
 
-diff=$(( ($date - $today)/86400 ))
+diff=$(( (date - today)/86400 ))
 
 # If 14 days remaining
 if [ $diff -le 14 ]

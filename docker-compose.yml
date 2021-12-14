@@ -16,7 +16,7 @@ services:
       - DB_ADMIN=postgres
       - DB_ADMIN_PASSWORD=${POSTGRES_PASSWORD}
       - DB_HOST=database
-      - DB_PORT=${POSTGRES_DB_PORT}
+      - DB_PORT=5432
       - DOMAIN=${DOMAIN}
     volumes:
       - type: ${STORAGE_TYPE}

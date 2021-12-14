@@ -51,9 +51,6 @@ function help {
     echo -e " - [${Cyan}set${Off}] ${Purple}database_password${Off}"
     echo -e "   need a value"
     echo -e "   Database password"
-    echo -e " - [${Cyan}set${Off}] ${Purple}database_port${Off}"
-    echo -e "   need a value"
-    echo -e "   Database port. It must be a valid port number"
     echo -e " - [${Cyan}set${Off}] ${Purple}domain${Off}"
     echo -e "   need a value"
     echo -e "   Set a custom domain. The value must start with http:// or https://:"
@@ -137,13 +134,6 @@ else
             checkValue $value
 
             sh scripts/env.sh POSTGRES_PASSWORD $value
-
-        #### Database port
-        elif [ "$option" = "database_port" ]
-        then
-            checkValue $value
-
-            sh scripts/env.sh POSTGRES_DB_PORT $value
 
         #### Domain
         elif [ "$option" = "domain" ]

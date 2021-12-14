@@ -109,7 +109,7 @@ function error {
 if [ -f .env ]
 then
     env=$(grep -v '^#' .env)
-    env=$(echo "$env" | sed "s/ //g") # Remove space
+    env=${env// /} # Remove space
     env=$(echo "$env" | sed -r '/^\s*$/d') # Remove blank line
     
     export "$(echo "$env" | xargs)"

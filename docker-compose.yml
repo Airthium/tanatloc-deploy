@@ -3,7 +3,7 @@ services:
     image: postgres:13
     restart: always
     environment:
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
     volumes:
       - postgresData:/var/lib/postgresql/data
 
@@ -14,7 +14,7 @@ services:
       - database
     environment:
       - DB_ADMIN=postgres
-      - DB_ADMIN_PASSWORD=${POSTGRES_PASSWORD}
+      - DB_ADMIN_PASSWORD=${DATABASE_PASSWORD}
       - DB_HOST=database
       - DB_PORT=5432
       - DOMAIN=${DOMAIN}

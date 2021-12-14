@@ -3,8 +3,6 @@
 key=$1
 value=$2
 
-echo $key
-echo $value
 
 ## Check .env file
 if [ ! -f .env ]

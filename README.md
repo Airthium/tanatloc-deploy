@@ -11,74 +11,110 @@ Pre-installation steps: see the [Wiki](https://github.com/Airthium/tanatloc-depl
 Default: `latest`
 
 ```
-sh tanatloc.sh set tanatloc_tag latest
+bash tanatloc.sh set tanatloc_tag latest
 ```
+
+Set the Tanatloc docker tag to use
 
 #### Database password
 
 Default: `password`
 
 ```
-sh tanatloc.sh set database_password password
+bash tanatloc.sh set database_password password
 ```
 
-#### Database port
+Set the database password
 
-Default: `5432`
+#### Database backup
+
+Default: `/media/tanatloc-backup/database`
 
 ```
-sh tanatloc.sh set database_port 5432
+bash tanatloc.sh set database_backup /media/tanatloc-backup/database
 ```
+
+Set the database backup path. You must specify an absolute path
+
+<span style="color: orange;">
+Warning: that does not activate the automatic backup system
+</span>
 
 #### Domain
 
 Default: Empty
 
 ```
-sh tanatloc.sh set domain https://domain.com
+bash tanatloc.sh set domain https://domain.com
 ```
 
-If the domain name starts with `https`, an SSL certificate will be build using `certbot`.
+Set the server domain
 
-If you want to renew the certificate, use `sh tanatloc.sh renew certificate`.
+If the domain name starts with `https`, an SSL certificate will be build using `certbot`
+
+If you want to renew the certificate, use `bash tanatloc.sh renew certificate`
 
 #### HTTP port
 
 Default: `80`
 
 ```
-sh tanatloc.sh set http_port 80
+bash tanatloc.sh set http_port 80
 ```
+
+Set the HTTP port
 
 #### HTTPS port
 
 Default: `443`
 
 ```
-sh tanatloc.sh set https_port 443
+bash tanatloc.sh set https_port 443
 ```
 
-#### Storage folder
+Set the HTTPS port
+
+#### Storage
+
+Default: Docker volume
 
 ```
-sh tanatloc.sh set storage /absolute/path
+bash tanatloc.sh set storage /absolute/path
 ```
 
-You must specify an absolute path
+Set the storage path. You must specify an absolute path
+
+#### Storage backup
+
+Default: `/media/tanatloc-backup/storage`
+
+```
+bash tanatloc.sh set storage_backup /media/tanatloc-backup/storage
+```
+
+Set the storage backup path. You must specify an absolute path
+
+<span style="color: orange;">
+Warning: that does not activate the automatic backup system
+</span>
 
 ### Database
 
 #### Backup
 
 ```
-sh tanatloc.sh database backup
+bash tanatloc.sh database backup
 ```
+
+Make a database backup
 
 #### Run
 
 ```
-sh tanatloc.sh database run
+bash tanatloc.sh database run
 ```
+
+Run the database docker
 
 ### Data
 
@@ -87,53 +123,79 @@ sh tanatloc.sh database run
 For docker volume only
 
 ```
-sh tanatloc.sh data backup
+bash tanatloc.sh data backup
 ```
+
+Make a storage backup
 
 #### Run
 
 ```
-sh tanatloc.sh data run
+bash tanatloc.sh data run
 ```
+
+Run the storage volume
+
+<span style="color: orange;">
+Warning: that only works if you keep the storage in a docker volume
+</span>
 
 ### Start
 
 ```
-sh tanatloc.sh start
+bash tanatloc.sh start
 ```
+
+Start Tanatloc
 
 ### Stop
 
 ```
-sh tanatloc.sh stop
+bash tanatloc.sh stop
 ```
+
+Stop Tanatloc
 
 ### Update
 
 ```
-sh tanatloc.sh update
+bash tanatloc.sh update
 ```
+
+Update Tanatloc with the latest docker
 
 ### Log
 
 ```
-sh tanatloc.sh log
+bash tanatloc.sh log
 ```
+
+Print Tanatloc log
 
 ### Clean
 
 ```
-sh tanatloc.sh clean
+bash tanatloc.sh clean
 ```
 
-Clean old docker images
+Clean old docker images (tanatloc, postgres, nginx)
 
 ### Renew
 
 #### Certificate
 
 ```
-sh tanatloc.sh renew certificate
+bash tanatloc.sh renew certificate
 ```
 
 Renew the SSL certificate
+
+## Cron
+
+`cron` scripts are available in `scripts/cron_*.sh` for:
+
+- start Tanatloc at system startup
+- automatically backup database and storage
+- automatically renew the SSL certificate
+
+Have a look on [example cron script](scripts/example.cron)

@@ -51,6 +51,9 @@ function help {
     echo -e " - [${Cyan}set${Off}] ${Purple}database_password${Off}"
     echo -e "   need a value"
     echo -e "   Database password"
+    echo -e " - [${Cyan}set${Off}] ${Purple}database_backup${Off}"
+    echo -e "   need a value"
+    echo -e "   Database backup path. This path must be absolute"
     echo -e " - [${Cyan}set${Off}] ${Purple}domain${Off}"
     echo -e "   need a value"
     echo -e "   Set a custom domain. The value must start with http:// or https://:"
@@ -63,6 +66,9 @@ function help {
     echo -e " - [${Cyan}set${Off}] ${Purple}storage${Off}"
     echo -e "   need a value"
     echo -e "   Set a custom storage using a path. The path must be absolute"
+    echo -e " - [${Cyan}set${Off}] ${Purple}storage_backup${Off}"
+    echo -e "   need a value"
+    echo -e "   Storage backup path. This path must be absolute"
     echo -e " - [${Cyan}database${Off}, ${Cyan}data${Off}] ${Purple}backup${Off}"
     echo -e "   Backup database or data"
     echo -e " - [${Cyan}database${Off}, ${Cyan}data${Off}] ${Purple}run${Off}"
@@ -103,6 +109,16 @@ function error {
     exit -1
 }
 
+## env file
+if [ -f .env ]
+then
+    env=`grep -v '^#' .env`
+    env=`echo "$env" | sed "s/ //g"` # Remove space
+    env=`echo "$env" | sed -r '/^\s*$/d'` # Remove blank line
+    
+    export $(echo "$env" | xargs)
+fi
+
 ## Tanatloc
 if [ $# -eq 0 ]
 then
@@ -133,7 +149,14 @@ else
         then
             checkValue $value
 
-            sh scripts/env.sh POSTGRES_PASSWORD $value
+            sh scripts/env.sh DATABASE_PASSWORD $value
+        
+        #### Database backup
+        elif [ "$option" = "database_backup" ]
+        then
+            checkValue $value
+
+            sh scripts/env.sh DATABASE_BACKUP_PATH $value
 
         #### Domain
         elif [ "$option" = "domain" ]
@@ -164,6 +187,13 @@ else
             
             sh scripts/env.sh STORAGE_TYPE bind
             sh scripts/env.sh STORAGE_PATH $value
+        
+        #### Storage backup
+        elif [ "$option" = "storage_backup" ]
+        then
+            checkValue $value
+
+            sh scripts/env.sh STORAGE_BACKUP_PATH $value
 
         #### Unknown
         else

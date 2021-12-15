@@ -4,7 +4,12 @@ domain=$1
 cleanDomain=$(echo "$domain" | cut -d "/" -f 3)
 
 # Set domain name
-sed "s/tanatloc.com/${cleanDomain}/" docker/nginx.conf > docker/run.nginx.conf
+if [ -f ../docker/run.nginx.conf ]
+then
+    sed "s/tanatloc.com/${cleanDomain}/" docker/nginx.conf > docker/run.nginx.conf
+else
+    sed -i "s/tanatloc.com/${cleanDomain}/" docker/run.nginx.conf
+fi
 
 # Check SSL
 if [ "$(echo "$domain" | cut -d ":" -f 1)" = "https" ]

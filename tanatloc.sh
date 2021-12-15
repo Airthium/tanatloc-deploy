@@ -15,9 +15,9 @@ function help {
     Purple='\033[0;35m'
     Cyan='\033[0;36m'
 
-    echo -e ""
     echo -e "Usage: tanatloc.sh ${Cyan}action ${Purple}[option] [value]${Off}"
     echo -e ""
+
     echo -e "List of ${Cyan}actions${Off}:"
     echo -e " - ${Cyan}log${Off}"
     echo -e "   display log"
@@ -40,6 +40,7 @@ function help {
     echo -e " - ${Cyan}renew${Off}"
     echo -e " - need option"
     echo -e ""
+
     echo -e "List of ${Purple}options${Off}:"
     echo -e " - [${Cyan}set${Off}] ${Purple}tanatloc_tag${Off}"
     echo -e "   need a value"
@@ -53,6 +54,9 @@ function help {
     echo -e " - [${Cyan}set${Off}] ${Purple}domain${Off}"
     echo -e "   need a value"
     echo -e "   Set a custom domain. The value must start with http:// or https://:"
+    echo -e " - [${Cyan}set${Off}] ${Purple}ipv6${Off}"
+    echo -e "   need a value"
+    echo -e "   IPv6 status. ON or OFF"
     echo -e " - [${Cyan}set${Off}] ${Purple}http_port${Off}"
     echo -e "   need a value"
     echo -e "   HTTP port. It must be a valid port number"
@@ -162,6 +166,14 @@ else
             sh scripts/domain.sh "$value"
             sh scripts/env.sh DOMAIN "$value"
 
+        #### IPv6
+        elif [ "$option" = "ipv6" ]
+        then
+            checkValue "$value"
+
+            sh scripts/ipv6.sh "$value"
+            sh scripts/env.sh IPV6 "$value"
+
         #### HTTP port
         elif [ "$option" = "http_port" ]
         then
@@ -269,7 +281,7 @@ else
     then
         checkEnv
 
-        docker-compose stop
+        docker-compose down
 
     ### Update
     elif [ "$action" = "update" ]
@@ -277,7 +289,7 @@ else
         checkEnv
 
         docker-compose pull
-        docker-compose stop
+        docker-compose down
         docker-compose up -d --remove-orphans
 
     ### Clean

@@ -112,7 +112,7 @@ function error {
 ## env file
 if [ -f .env ]
 then
-    while read line
+    while read -r line
     do
         # Empty line
         if [ -z "$line" ]
@@ -129,7 +129,7 @@ then
         # Remove spaces
         line=${line// /}
 
-        export "$line"
+        export "${line?}"
     done < ".env"
 fi
 

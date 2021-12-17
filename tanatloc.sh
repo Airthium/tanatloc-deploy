@@ -112,11 +112,25 @@ function error {
 ## env file
 if [ -f .env ]
 then
-    env=$(grep -v '^#' .env)
-    env=${env// /} # Remove space
-    env=$(echo "$env" | sed -r '/^\s*$/d') # Remove blank line
-    
-    export "$(echo "$env" | xargs)"
+    while read line
+    do
+        # Empty line
+        if [ -z "$line" ]
+        then
+            continue
+        fi
+
+        # Line with at least a #
+        if [[ "$line" == *"#"* ]]
+        then
+            continue
+        fi
+
+        # Remove spaces
+        line=${line// /}
+
+        export "$line"
+    done < ".env"
 fi
 
 ## Tanatloc

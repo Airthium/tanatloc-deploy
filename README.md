@@ -199,3 +199,27 @@ Renew the SSL certificate
 - automatically renew the SSL certificate
 
 Have a look on [example cron script](scripts/example.cron)
+
+## Sharetask usage
+
+### Share executables
+
+Modify `docker-compose.yml`
+
+In `services`, `tanatloc`, `environment`, add:
+
+```
+- ADDITIONAL_PATH=/usr/local/jre/bin:/usr/local/sharetask/bin
+- SHARETASK_JVM=/usr/local/jre/bin/java
+```
+
+In `services`, `tanatloc`, `volumes`, add:
+
+```
+- type: bind
+  source: sharetask path
+  target: /usr/local/sharetask/bin
+- type: bind
+  source: java path
+  target: /usr/local/jre/bin
+```

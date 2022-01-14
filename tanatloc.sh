@@ -68,6 +68,8 @@ function help {
     echo -e "   Set a custom storage using a path. The path must be absolute"
     echo -e " - [${Cyan}set${Off}] ${Purple}storage_backup${Off}"
     echo -e "   need a value"
+    echo -e " - [${Cyan}set${Off}] ${Purple}additional_path${Off}"
+    echo -e "   need a value"
     echo -e "   Storage backup path. This path must be absolute"
     echo -e " - [${Cyan}database${Off}, ${Cyan}data${Off}] ${Purple}backup${Off}"
     echo -e "   Backup database or data"
@@ -216,6 +218,13 @@ else
             checkValue "$value"
 
             sh scripts/env.sh STORAGE_BACKUP_PATH "$value"
+
+        #### Additional path
+        elif [ "$option" = "additional_path" ]
+        then
+            checkValue "$value"
+
+            sh script/env.sh ADDITIONAL_PATH "$value"
 
         #### Unknown
         else

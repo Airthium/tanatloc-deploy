@@ -217,9 +217,9 @@ In `services`, `tanatloc`, `volumes`, add:
 
 ```
 - type: bind
-  source: sharetask path
+  source: host sharetask path
   target: /usr/local/sharetask/bin
 - type: bind
-  source: java path
+  source: host java path
   target: /usr/local/jre/bin
 ```

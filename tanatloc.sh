@@ -224,7 +224,7 @@ else
         then
             checkValue "$value"
 
-            sh script/env.sh ADDITIONAL_PATH "$value"
+            sh scripts/env.sh ADDITIONAL_PATH "$value"
 
         #### Unknown
         else

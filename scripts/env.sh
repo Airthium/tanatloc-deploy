@@ -3,7 +3,6 @@
 key=$1
 value=$2
 
-
 ## Check .env file
 if [ ! -f .env ]
 then

@@ -1,6 +1,23 @@
 # Tanatloc (SSR) deployment
 
-Pre-installation steps: see the [Wiki](https://github.com/Airthium/tanatloc-deploy/wiki)
+## Requirements
+
+- [Docker](https://docs.docker.com/get-docker/)
+- [Docker compose](https://docs.docker.com/compose/install/)
+- [certbot](https://eff-certbot.readthedocs.io/en/stable/install.html)
+
+## Quick start
+
+Without any customization, you can just run:
+
+```bash
+sh tanatloc.sh start
+```
+
+The server will start with a default user:
+
+- email: `admin`
+- password: `password`
 
 ## Options
 
@@ -204,12 +221,17 @@ Have a look on [example cron script](scripts/example.cron)
 
 ### Share executables
 
+Add additional path value:
+
+```bash
+sh tanatloc.sh set additional_path /usr/local/jre/bin:/usr/local/sharetask/bin
+```
+
 Modify `docker-compose.yml`
 
 In `services`, `tanatloc`, `environment`, add:
 
 ```
-- ADDITIONAL_PATH=/usr/local/jre/bin:/usr/local/sharetask/bin
 - SHARETASK_JVM=/usr/local/jre/bin/java
 ```
 

@@ -6,9 +6,9 @@ cleanDomain=$(echo "$domain" | cut -d "/" -f 3)
 # Set domain name
 if [ -f ../docker/run.nginx.conf ]
 then
-    sed "s/tanatloc.com/${cleanDomain}/" docker/nginx.conf > docker/run.nginx.conf
-else
     sed -i "s/tanatloc.com/${cleanDomain}/" docker/run.nginx.conf
+else
+    sed "s/tanatloc.com/${cleanDomain}/" docker/nginx.conf > docker/run.nginx.conf
 fi
 
 # Check SSL

@@ -19,6 +19,7 @@ services:
       - DB_PORT=5432
       - DOMAIN=${DOMAIN}
       - ADDITIONAL_PATH=${ADDITIONAL_PATH}
+      - HOST_STORAGE=${STORAGE_PATH}
     volumes:
       - type: ${STORAGE_TYPE}
         source: ${STORAGE_PATH}

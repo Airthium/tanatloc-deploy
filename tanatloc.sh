@@ -5,6 +5,10 @@ action=$1
 option=$2
 value=$3
 
+type=$3
+source=$4
+target=$5
+
 # Help
 Red='\033[0;31m'
 Off='\033[0m'
@@ -16,17 +20,10 @@ function help {
     Cyan='\033[0;36m'
 
     echo -e "Usage: tanatloc.sh ${Cyan}action ${Purple}[option] [value]${Off}"
+    echo -e "Usage: tanatloc.sh ${Cyan}action ${Purple}[option] [type] [source] [target]${Off}"
     echo -e ""
 
     echo -e "List of ${Cyan}actions${Off}:"
-    echo -e " - ${Cyan}log${Off}"
-    echo -e "   display log"
-    echo -e " - ${Cyan}set${Off}"
-    echo -e "   need option and value"
-    echo -e " - ${Cyan}database${Off}"
-    echo -e "   need option"
-    echo -e " - ${Cyan}data${Off}"
-    echo -e "   need option"
     echo -e " - ${Cyan}start${Off}"
     echo -e "   Start the Tanatloc server"
     echo -e " - ${Cyan}stop${Off}"
@@ -35,10 +32,18 @@ function help {
     echo -e "   Update the Tanatloc server"
     echo -e " - ${Cyan}clean${Off}"
     echo -e "   Clean old docker images"
-    echo -e " - ${Cyan}run${Off}"
-    echo -e "   need option"
     echo -e " - ${Cyan}renew${Off}"
     echo -e " - need option"
+    echo -e " - ${Cyan}log${Off}"
+    echo -e "   display log"
+    echo -e " - ${Cyan}set${Off}"
+    echo -e "   need option and value"
+    echo -e " - ${Cyan}add${Off}"
+    echo -e "   need option and value"
+    echo -e " - ${Cyan}database${Off}"
+    echo -e "   need option"
+    echo -e " - ${Cyan}data${Off}"
+    echo -e "   need option"
     echo -e ""
 
     echo -e "List of ${Purple}options${Off}:"
@@ -81,6 +86,9 @@ function help {
     echo -e " - [${Cyan}set${Off}] ${Purple}sharetask_jvm${Off}"
     echo -e "   need a value"
     echo -e "   Set the SHARETASK_JVM environment variable."
+    echo -e " - [${Cyan}add${Off}] ${Purple}volume${Off}"
+    echo -e "   need type, source, target"
+    echo -e "   Add a volume in tanatloc service."
     echo -e " - [${Cyan}database${Off}, ${Cyan}data${Off}] ${Purple}backup${Off}"
     echo -e "   Backup database or data"
     echo -e " - [${Cyan}database${Off}, ${Cyan}data${Off}] ${Purple}run${Off}"
@@ -262,6 +270,26 @@ else
             error "Unknown option ${option}"
         fi
 
+    ### Add
+    elif [ "$action" = "add" ]
+    then
+        checkEnv
+        checkOption "$option"
+
+        #### Volume
+        if [ "$option" = "volume" ]
+        then
+            checkValue "$type"
+            checkValue "$source"
+            checkValue "$target"
+
+            sh scripts/volume.sh "$type" "$source" "$target"
+        
+        #### Unknown
+        else
+            error "Unknown option ${option}"
+        fi
+
     ### Database
     elif [ "$action" = "database" ]
     then
@@ -321,7 +349,7 @@ else
         fi
 
         #### Start
-        docker-compose up -d --remove-orphans
+        docker-compose -f docker-compose.yml -f docker-compose.volumes.yml up -d --remove-orphans
 
     ### Restart
     elif [ "$action" = "restart" ]
@@ -344,7 +372,7 @@ else
 
         docker-compose pull
         docker-compose down
-        docker-compose up -d --remove-orphans
+        docker-compose -f docker-compose.yml -f docker-compose.volumes.yml up -d --remove-orphans
 
     ### Clean
     elif [ "$action" = "clean" ]

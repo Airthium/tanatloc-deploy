@@ -21,6 +21,56 @@ The server will start with a default user:
 
 ## Options
 
+### Start
+
+```
+bash tanatloc.sh start
+```
+
+Start Tanatloc
+
+### Stop
+
+```
+bash tanatloc.sh stop
+```
+
+Stop Tanatloc
+
+### Update
+
+```
+bash tanatloc.sh update
+```
+
+Update Tanatloc with the latest docker
+
+### Clean
+
+```
+bash tanatloc.sh clean
+```
+
+Clean old docker images (tanatloc, postgres, nginx)
+
+### Renew
+
+#### Certificate
+
+```
+bash tanatloc.sh renew certificate
+```
+
+Renew the SSL certificate
+
+### Log
+
+```
+bash tanatloc.sh log
+```
+
+Print Tanatloc log
+
 ### Set
 
 #### Tanatloc tag
@@ -54,7 +104,7 @@ bash tanatloc.sh set database_backup /media/tanatloc-backup/database
 Set the database backup path. You must specify an absolute path
 
 <span style="color: orange;">
-Warning: that does not activate the automatic backup system
+:warning Warning: that does not activate the automatic backup system
 </span>
 
 #### Domain
@@ -132,7 +182,7 @@ bash tanatloc.sh set storage_backup /media/tanatloc-backup/storage
 Set the storage backup path. You must specify an absolute path
 
 <span style="color: orange;">
-Warning: that does not activate the automatic backup system
+:warning Warning: that does not activate the automatic backup system
 </span>
 
 #### Additional path
@@ -154,6 +204,22 @@ bash tanatloc.sh set sharetask_jvm /usr/local/bin/java
 ```
 
 Set the SHARETASK_JVM environment variable
+
+### Add
+
+#### Volume
+
+Default: None
+
+```
+bash tanatloc.sh add volume bind /source/path /target/path
+```
+
+Add volume to Tanatloc service
+
+<span style="color: orange;">
+:warning Warning: you can only add volumes, to remove or edit it you must edit the <a href="./docker-compose.volumes.yml">docker-compose.volumes.yml file</a>
+</span>
 
 ### Database
 
@@ -194,58 +260,8 @@ bash tanatloc.sh data run
 Run the storage volume
 
 <span style="color: orange;">
-Warning: that only works if you keep the storage in a docker volume
+:warning Warning: that only works if you keep the storage in a docker volume
 </span>
-
-### Start
-
-```
-bash tanatloc.sh start
-```
-
-Start Tanatloc
-
-### Stop
-
-```
-bash tanatloc.sh stop
-```
-
-Stop Tanatloc
-
-### Update
-
-```
-bash tanatloc.sh update
-```
-
-Update Tanatloc with the latest docker
-
-### Log
-
-```
-bash tanatloc.sh log
-```
-
-Print Tanatloc log
-
-### Clean
-
-```
-bash tanatloc.sh clean
-```
-
-Clean old docker images (tanatloc, postgres, nginx)
-
-### Renew
-
-#### Certificate
-
-```
-bash tanatloc.sh renew certificate
-```
-
-Renew the SSL certificate
 
 ## Cron
 
@@ -270,16 +286,12 @@ bash tanatloc.sh set additional_path /path/to/sharetask/bin
 Set SHARETASK_JVM:
 
 ```bash
-bash tanatloc.sh set sharetask_jvm /path/to/bin/java
+bash tanatloc.sh set sharetask_jvm /path/to/java/bin/java
 ```
 
-In `services`, `tanatloc`, `volumes`, add:
+Add volume bind:
 
-```
-- type: bind
-  source: host sharetask path
-  target: /usr/local/sharetask/bin
-- type: bind
-  source: host java path
-  target: /usr/local/jre/bin
+```bash
+bash tanatloc.sh add volume bind /path/to/sharetask/bin
+bash tanatloc.sh add volume bind /path/to/java/bin
 ```

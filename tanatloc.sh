@@ -63,14 +63,24 @@ function help {
     echo -e " - [${Cyan}set${Off}] ${Purple}https_port${Off}"
     echo -e "   need a value"
     echo -e "   HTTPS port. It must be a valid port number"
+    echo -e " - [${Cyan}set${Off}] ${Purple}http_proxy${Off}"
+    echo -e "   need a value"
+    echo -e "   HTTP proxy. It must be a valid URL"
+    echo -e " - [${Cyan}set${Off}] ${Purple}https_proxy${Off}"
+    echo -e "   need a value"
+    echo -e "   HTTPS proxy. It must be a valid URL"
     echo -e " - [${Cyan}set${Off}] ${Purple}storage${Off}"
     echo -e "   need a value"
     echo -e "   Set a custom storage using a path. The path must be absolute"
     echo -e " - [${Cyan}set${Off}] ${Purple}storage_backup${Off}"
     echo -e "   need a value"
+    echo -e "   Storage backup path. This path must be absolute"
     echo -e " - [${Cyan}set${Off}] ${Purple}additional_path${Off}"
     echo -e "   need a value"
-    echo -e "   Storage backup path. This path must be absolute"
+    echo -e "   Additional path."
+    echo -e " - [${Cyan}set${Off}] ${Purple}sharetask_jvm${Off}"
+    echo -e "   need a value"
+    echo -e "   Set the SHARETASK_JVM environment variable."
     echo -e " - [${Cyan}database${Off}, ${Cyan}data${Off}] ${Purple}backup${Off}"
     echo -e "   Backup database or data"
     echo -e " - [${Cyan}database${Off}, ${Cyan}data${Off}] ${Purple}run${Off}"
@@ -204,6 +214,20 @@ else
 
             sh scripts/env.sh NGINX_HTTPS "$value"
 
+        #### HTTP proxy
+        elif [ "$option" = "http_proxy" ]
+        then
+            checkValue "$value"
+
+            sh scripts/env.sh HTTP_PROXY "$value"
+
+        #### HTTPS proxy
+        elif [ "$option" = "https_proxy" ]
+        then
+            checkValue "$value"
+
+            sh scripts/env.sh HTTPS_PROXY "$value"
+
         #### Storage
         elif [ "$option" = "storage" ]
         then
@@ -225,6 +249,13 @@ else
             checkValue "$value"
 
             sh scripts/env.sh ADDITIONAL_PATH "$value"
+
+        #### Sharetask jvm
+        elif [ "$option" = "sharetask_jvm" ]
+        then
+            checkValue "$value"
+
+            sh scripts/env.sh SHARETASK_JVM "$value"
 
         #### Unknown
         else

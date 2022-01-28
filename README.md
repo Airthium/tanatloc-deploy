@@ -11,7 +11,7 @@
 Without any customization, you can just run:
 
 ```bash
-sh tanatloc.sh start
+bash tanatloc.sh start
 ```
 
 The server will start with a default user:
@@ -91,6 +91,26 @@ bash tanatloc.sh set https_port 443
 
 Set the HTTPS port
 
+#### HTTP proxy
+
+Default: Empty
+
+```
+bash tanatloc.sh set http_proxy htpps://my.proxy
+```
+
+Set the HTTP proxy
+
+#### HTTPS proxy
+
+Default: Empty
+
+```
+bash tanatloc.sh set https_proxy htpps://my.proxy
+```
+
+Set the HTTPS proxy
+
 #### Storage
 
 Default: Docker volume
@@ -114,6 +134,26 @@ Set the storage backup path. You must specify an absolute path
 <span style="color: orange;">
 Warning: that does not activate the automatic backup system
 </span>
+
+#### Additional path
+
+Default: Empty
+
+```
+bash tanatloc.sh set additional_path /usr/local/bin
+```
+
+Add paths to $PATH environement variable
+
+#### SHARETASK_JVM
+
+Default: Empty
+
+```
+bash tanatloc.sh set sharetask_jvm /usr/local/bin/java
+```
+
+Set the SHARETASK_JVM environment variable
 
 ### Database
 
@@ -224,15 +264,13 @@ Have a look on [example cron script](scripts/example.cron)
 Add additional path value:
 
 ```bash
-sh tanatloc.sh set additional_path /usr/local/jre/bin:/usr/local/sharetask/bin
+bash tanatloc.sh set additional_path /path/to/sharetask/bin
 ```
 
-Modify `docker-compose.yml`
+Set SHARETASK_JVM:
 
-In `services`, `tanatloc`, `environment`, add:
-
-```
-- SHARETASK_JVM=/usr/local/jre/bin/java
+```bash
+bash tanatloc.sh set sharetask_jvm /path/to/bin/java
 ```
 
 In `services`, `tanatloc`, `volumes`, add:

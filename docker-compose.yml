@@ -20,6 +20,9 @@ services:
       - DOMAIN=${DOMAIN}
       - ADDITIONAL_PATH=${ADDITIONAL_PATH}
       - HOST_STORAGE=${STORAGE_PATH}
+      - HTTP_PROXY=${HTTP_PROXY}
+      - HTTPS_PROXY=${HTTPS_PROXY}
+      - SHARETASK_JVM=${SHARETASK_JVM}
     volumes:
       - type: ${STORAGE_TYPE}
         source: ${STORAGE_PATH}
@@ -33,6 +36,9 @@ services:
     ports:
       - "${NGINX_HTTP}:80"
       - "${NGINX_HTTPS}:443"
+    environment:
+      - HTTP_PROXY=${HTTP_PROXY}
+      - HTTPS_PROXY=${HTTPS_PROXY}
     volumes:
       - ./docker/run.nginx.conf:/etc/nginx/nginx.conf
       - /etc/letsencrypt:/etc/letsencrypt

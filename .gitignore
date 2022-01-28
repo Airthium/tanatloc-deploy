@@ -1,2 +1,3 @@
 docker/run.nginx.conf
 .env
+docker-compose.volumes.yml

@@ -8,6 +8,7 @@ services:
       - postgresData:/var/lib/postgresql/data
 
   tanatloc:
+    user: "$UID:$GID"
     image: tanatloc/tanatloc:${TANATLOC_TAG}
     restart: always
     depends_on:
@@ -26,7 +27,7 @@ services:
     volumes:
       - type: ${STORAGE_TYPE}
         source: ${STORAGE_PATH}
-        target: /data
+        target: /home/app/tanatloc
 
   network:
     image: nginx:1.21

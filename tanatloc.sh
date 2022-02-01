@@ -9,6 +9,10 @@ type=$3
 source=$4
 target=$5
 
+# User and group id
+sh scripts/env.sh UID "$(id -u)"
+sh scripts/env.sh GID "$(id -g)"
+
 # Help
 Red='\033[0;31m'
 Off='\033[0m'

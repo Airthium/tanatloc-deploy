@@ -26,7 +26,7 @@ services:
     volumes:
       - type: ${STORAGE_TYPE}
         source: ${STORAGE_PATH}
-        target: /root/tanatloc
+        target: /data
 
   network:
     image: nginx:1.21

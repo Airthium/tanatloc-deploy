@@ -280,18 +280,18 @@ Have a look on [example cron script](scripts/example.cron)
 Add additional path value:
 
 ```bash
-bash tanatloc.sh set additional_path /path/to/sharetask/bin
+bash tanatloc.sh set additional_path /usr/local/sharetask/bin
 ```
 
 Set SHARETASK_JVM:
 
 ```bash
-bash tanatloc.sh set sharetask_jvm /path/to/java/bin/java
+bash tanatloc.sh set sharetask_jvm /usr/local/jre/bin/java
 ```
 
 Add volume bind:
 
 ```bash
-bash tanatloc.sh add volume bind /path/to/sharetask/bin
-bash tanatloc.sh add volume bind /path/to/java/bin
+bash tanatloc.sh add volume bind /path/to/sharetask/bin /usr/local/sharetask/bin
+bash tanatloc.sh add volume bind /path/to/java/bin /usr/local/jre/bin
 ```

@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 echo " - Modify postgres version (old kernel)"
 sed -i 's/postgres:14/postgres:13-buster/g' ./docker-compose.yml

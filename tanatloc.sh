@@ -153,7 +153,12 @@ then
         # Remove spaces
         line=${line// /}
 
-        export "${line?}"
+        # Skip UID
+        if [[ ! "$line" == *"UID="* ]]
+        then
+            export "${line?}"
+        fi
+
     done < ".env"
 fi
 

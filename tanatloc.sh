@@ -16,7 +16,7 @@ sh scripts/env.sh GID "$(id -g)"
 # Help
 Red='\033[0;31m'
 Off='\033[0m'
-function help {
+help() {
     # Green='\033[0;32m'
     # Yellow='\033[0;33m'
     # Blue='\033[0;34m'
@@ -32,6 +32,8 @@ function help {
     echo -e "   Start the Tanatloc server"
     echo -e " - ${Cyan}stop${Off}"
     echo -e "   Stop the Tanatloc server"
+    echo -e " - ${Cyan}update-self${Off}"
+    echo -e "   Update the Tanatloc deployment script"
     echo -e " - ${Cyan}update${Off}"
     echo -e "   Update the Tanatloc server"
     echo -e " - ${Cyan}clean${Off}"
@@ -103,7 +105,7 @@ function help {
 }
 
 # Check env
-function checkEnv {
+checkEnv() {
     if [ ! -f .env ]
     then
         error ".env file not found, Please start Tanatloc first"
@@ -111,7 +113,7 @@ function checkEnv {
 }
 
 # Check option
-function checkOption {
+checkOption() {
     if [ -z "$1" ]
     then
         error "Undefined or empty option"
@@ -119,7 +121,7 @@ function checkOption {
 }
 
 # Check value
-function checkValue {
+checkValue() {
     if [ -z "$1" ]
     then
         error "Undefined or empty value"
@@ -127,7 +129,7 @@ function checkValue {
 }
 
 # Error
-function error {
+error() {
     echo -e "${Red}$1${Off}"
     help
     exit 1
@@ -145,19 +147,21 @@ then
         fi
 
         # Line with at least a #
-        if [[ "$line" == *"#"* ]]
+        if [ -z "${line###*}" ]
         then
             continue
         fi
 
         # Remove spaces
-        line=${line// /}
+        line=$(echo "$line" | sed -e "s/ //g")
 
         # Skip UID
-        if [[ ! "$line" == *"UID="* ]]
+        if [ -z "${line##*UID=*}" ]
         then
-            export "${line?}"
+            continue
         fi
+
+        export "${line?}"
 
     done < ".env"
 fi
@@ -373,6 +377,11 @@ else
         checkEnv
 
         docker-compose down
+
+    ### Update self
+    elif [ "$action" = "update-self" ]
+    then
+        git pull
 
     ### Update
     elif [ "$action" = "update" ]

@@ -11,3 +11,5 @@ jobs:
 
       - name: Run Shellcheck
         uses: ludeeus/action-shellcheck@master
+        env:
+          SHELLCHECK_OPTS: -s sh

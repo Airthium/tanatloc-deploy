@@ -37,6 +37,14 @@ bash tanatloc.sh stop
 
 Stop Tanatloc
 
+### Update self
+
+```
+bash tanatloc.sh update-self
+```
+
+Update Tanatloc deployment script
+
 ### Update
 
 ```

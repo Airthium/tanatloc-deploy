@@ -9,5 +9,13 @@ then
     cp ./conf/default.conf ./.env
 fi
 
-## Modify key/value
-sed -i "/^${key} /s|= .*$|= ${value}|" .env
+## Check if key exists
+if grep -q "$key" .env
+then
+    ## Modify key/value
+    sed -i "/^${key} /s|= .*$|= ${value}|" .env
+else
+    ## Add key/value
+    echo "$key = $value" >> .env
+fi
+

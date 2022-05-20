@@ -5,9 +5,9 @@ action=$1
 option=$2
 value=$3
 
-type=$3
-source=$4
-target=$5
+arg1=$3
+arg2=$4
+arg3=$5
 
 # User and group id
 sh scripts/env.sh UID "$(id -u)"
@@ -24,7 +24,7 @@ help() {
     Cyan='\033[0;36m'
 
     echo -e "Usage: tanatloc.sh ${Cyan}action ${Purple}[option] [value]${Off}"
-    echo -e "Usage: tanatloc.sh ${Cyan}action ${Purple}[option] [type] [source] [target]${Off}"
+    echo -e "Usage: tanatloc.sh ${Cyan}action ${Purple}[option] [arg1] [arg2] [arg3]${Off}"
     echo -e ""
 
     echo -e "List of ${Cyan}actions${Off}:"
@@ -95,6 +95,12 @@ help() {
     echo -e " - [${Cyan}add${Off}] ${Purple}volume${Off}"
     echo -e "   need type, source, target"
     echo -e "   Add a volume in tanatloc service."
+    echo -e " - [${Cyan}add${Off}] ${Purple}dns${Off}"
+    echo -e "   need dns"
+    echo -e "   Add a dns in tanatloc service."
+    echo -e " - [${Cyan}add${Off}] ${Purple}extra_host${Off}"
+    echo -e "   need extra_host"
+    echo -e "   Add an extra host in tanatloc service."
     echo -e " - [${Cyan}database${Off}, ${Cyan}data${Off}] ${Purple}backup${Off}"
     echo -e "   Backup database or data"
     echo -e " - [${Cyan}database${Off}, ${Cyan}data${Off}] ${Purple}run${Off}"
@@ -292,12 +298,26 @@ else
         #### Volume
         if [ "$option" = "volume" ]
         then
-            checkValue "$type"
-            checkValue "$source"
-            checkValue "$target"
+            checkValue "$arg1"
+            checkValue "$arg2"
+            checkValue "$arg3"
 
-            sh scripts/volume.sh "$type" "$source" "$target"
+            sh scripts/volume.sh "$arg1" "$arg2" "$arg3"
         
+        ### DNS
+        if [ "$option" = "dns" ]
+        then
+            checkValue "$arg1"
+
+            sh scripts/dns.sh "$arg1"
+
+        ### Extra host
+        if [ "$option" = "extra_host" ]
+        then
+            checkValue "$arg1"
+
+            sh scripts/extra_host.sh "$arg1"
+
         #### Unknown
         else
             error "Unknown option ${option}"

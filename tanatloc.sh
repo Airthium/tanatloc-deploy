@@ -9,6 +9,9 @@ arg1=$3
 arg2=$4
 arg3=$5
 
+# Version
+echo -e "Tanatloc deployment script - v1.0"
+
 # User and group id
 sh scripts/env.sh UID "$(id -u)"
 sh scripts/env.sh GID "$(id -g)"

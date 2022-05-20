@@ -3,9 +3,17 @@
 echo " - Modify postgres version (old kernel)"
 sed -i 's/postgres:14/postgres:13-buster/g' ./docker-compose.yml
 
-echo " - Clean additional volumes"
+echo " - Clean volumes"
 echo "services:" > ./docker-compose.volumes.yml
 echo "  tanatloc:" >> ./docker-compose.volumes.yml
+
+echo " - Clean dns"
+echo "services:" > ./docker-compose.dns.yml
+echo "  tanatloc:" >> ./docker-compose.dns.yml
+
+echo " - Clean extra_hosts"
+echo "services:" > ./docker-compose.extra_hosts.yml
+echo "  tanatloc:" >> ./docker-compose.extra_hosts.yml
 
 echo " - Set denso tag"
 bash tanatloc.sh set tanatloc_tag denso

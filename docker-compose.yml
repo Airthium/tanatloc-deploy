@@ -1,6 +1,6 @@
 services:
   database:
-    image: postgres:14
+    image: postgres:13-buster
     restart: always
     environment:
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}

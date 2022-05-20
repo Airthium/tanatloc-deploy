@@ -5,7 +5,7 @@ source=$2
 target=$3
 
 # Check if "volumes:" is already defined
-if ! grep "    volumes:" docker-compose.volumes.yml
+if ! grep -q "    volumes:" docker-compose.volumes.yml
 then
     echo "    volumes:" >> docker-compose.volumes.yml
 fi

@@ -18,4 +18,3 @@ else
     ## Add key/value
     echo "$key = $value" >> .env
 fi
-

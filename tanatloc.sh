@@ -305,18 +305,18 @@ else
             sh scripts/volume.sh "$arg1" "$arg2" "$arg3"
         
         ### DNS
-        if [ "$option" = "dns" ]
+        elif [ "$option" = "dns" ]
         then
             checkValue "$arg1"
 
             sh scripts/dns.sh "$arg1"
 
         ### Extra host
-        if [ "$option" = "extra_host" ]
+        elif [ "$option" = "extra_host" ]
         then
             checkValue "$arg1"
 
-            sh scripts/extra_host.sh "$arg1"
+            sh scripts/extra_hosts.sh "$arg1"
 
         #### Unknown
         else
@@ -382,7 +382,7 @@ else
         fi
 
         #### Start
-        docker-compose -f docker-compose.yml -f docker-compose.volumes.yml up -d --remove-orphans
+        docker-compose -f docker-compose.yml -f docker-compose.volumes.yml -f docker-compose.dns.yml -f docker-compose.extra_hosts.yml up -d --remove-orphans
 
     ### Restart
     elif [ "$action" = "restart" ]
@@ -410,7 +410,7 @@ else
 
         docker-compose pull
         docker-compose down
-        docker-compose -f docker-compose.yml -f docker-compose.volumes.yml up -d --remove-orphans
+        docker-compose -f docker-compose.yml -f docker-compose.volumes.yml -f docker-compose.dns.yml -f docker-compose.extra_hosts.yml up -d --remove-orphans
 
     ### Clean
     elif [ "$action" = "clean" ]

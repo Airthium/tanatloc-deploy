@@ -13,6 +13,7 @@ services:
     depends_on:
       - database
     environment:
+      - USER=${USER}
       - UID=${UID}
       - GID=${GID}
       - DB_ADMIN=postgres

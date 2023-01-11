@@ -106,6 +106,9 @@ help() {
     echo -e "   Add an extra host in tanatloc service."
     echo -e " - [${Cyan}database${Off}, ${Cyan}data${Off}] ${Purple}backup${Off}"
     echo -e "   Backup database or data"
+    echo -e " - ${Cyan}database${Off} ${Purple}restore${Off}"
+    echo -e "   need a value"
+    echo -e "   Restore database from dump file"
     echo -e " - [${Cyan}database${Off}, ${Cyan}data${Off}] ${Purple}run${Off}"
     echo -e "   Run database or data docker"
     echo -e " - [${Cyan}renew${Off}] ${Purple}certificate${Off}"
@@ -115,24 +118,21 @@ help() {
 
 # Check env
 checkEnv() {
-    if [ ! -f .env ]
-    then
+    if [ ! -f .env ]; then
         error ".env file not found, Please start Tanatloc first"
     fi
 }
 
 # Check option
 checkOption() {
-    if [ -z "$1" ]
-    then
+    if [ -z "$1" ]; then
         error "Undefined or empty option"
     fi
 }
 
 # Check value
 checkValue() {
-    if [ -z "$1" ]
-    then
+    if [ -z "$1" ]; then
         error "Undefined or empty value"
     fi
 }
@@ -145,19 +145,15 @@ error() {
 }
 
 ## env file
-if [ -f .env ]
-then
-    while read -r line
-    do
+if [ -f .env ]; then
+    while read -r line; do
         # Empty line
-        if [ -z "$line" ]
-        then
+        if [ -z "$line" ]; then
             continue
         fi
 
         # Line with at least a #
-        if [ -z "${line###*}" ]
-        then
+        if [ -z "${line###*}" ]; then
             continue
         fi
 
@@ -165,124 +161,107 @@ then
         line=$(echo "$line" | sed -e "s/ //g")
 
         # Skip UID
-        if [ -z "${line##*UID=*}" ]
-        then
+        if [ -z "${line##*UID=*}" ]; then
             continue
         fi
 
         export "${line?}"
 
-    done < ".env"
+    done <".env"
 fi
 
 ## Tanatloc
-if [ $# -eq 0 ]
-then
+if [ $# -eq 0 ]; then
     help
 else
 
     ### Log
-    if [ "$action" = "log" ]
-    then
+    if [ "$action" = "log" ]; then
         checkEnv
-        
+
         docker-compose logs
 
     ### Set
-    elif [ "$action" = "set" ]
-    then
+    elif [ "$action" = "set" ]; then
         checkOption "$option"
 
         #### Tanatloc tag
-        if [ "$option" = "tanatloc_tag" ]
-        then
+        if [ "$option" = "tanatloc_tag" ]; then
             checkValue "$value"
 
             sh scripts/env.sh TANATLOC_TAG "$value"
-        
+
         #### Database password
-        elif [ "$option" = "database_password" ]
-        then
+        elif [ "$option" = "database_password" ]; then
             checkValue "$value"
 
             sh scripts/env.sh DATABASE_PASSWORD "$value"
-        
+
         #### Database backup
-        elif [ "$option" = "database_backup" ]
-        then
+        elif [ "$option" = "database_backup" ]; then
             checkValue "$value"
 
             sh scripts/env.sh DATABASE_BACKUP_PATH "$value"
 
         #### Domain
-        elif [ "$option" = "domain" ]
-        then
+        elif [ "$option" = "domain" ]; then
             checkValue "$value"
-            
+
             sh scripts/domain.sh "$value"
             sh scripts/env.sh DOMAIN "$value"
 
         #### IPv6
-        elif [ "$option" = "ipv6" ]
-        then
+        elif [ "$option" = "ipv6" ]; then
             checkValue "$value"
 
             sh scripts/ipv6.sh "$value"
             sh scripts/env.sh IPV6 "$value"
 
         #### HTTP port
-        elif [ "$option" = "http_port" ]
-        then
+        elif [ "$option" = "http_port" ]; then
             checkValue "$value"
 
             sh scripts/env.sh NGINX_HTTP "$value"
 
         #### HTTPS port
-        elif [ "$option" = "https_port" ]
-        then
+        elif [ "$option" = "https_port" ]; then
             checkValue "$value"
 
             sh scripts/env.sh NGINX_HTTPS "$value"
 
         #### HTTP proxy
-        elif [ "$option" = "http_proxy" ]
-        then
+        elif [ "$option" = "http_proxy" ]; then
             checkValue "$value"
 
             sh scripts/env.sh HTTP_PROXY "$value"
 
         #### HTTPS proxy
-        elif [ "$option" = "https_proxy" ]
-        then
+        elif [ "$option" = "https_proxy" ]; then
             checkValue "$value"
 
             sh scripts/env.sh HTTPS_PROXY "$value"
 
         #### Storage
-        elif [ "$option" = "storage" ]
-        then
+        elif [ "$option" = "storage" ]; then
             checkValue "$value"
-            
+
             sh scripts/env.sh STORAGE_TYPE "bind"
             sh scripts/env.sh STORAGE_PATH "$value"
-        
+
         #### Storage backup
-        elif [ "$option" = "storage_backup" ]
-        then
+        elif [ "$option" = "storage_backup" ]; then
             checkValue "$value"
 
             sh scripts/env.sh STORAGE_BACKUP_PATH "$value"
 
         #### Additional path
-        elif [ "$option" = "additional_path" ]
-        then
+        elif [ "$option" = "additional_path" ]; then
             checkValue "$value"
 
             sh scripts/env.sh ADDITIONAL_PATH "$value"
 
         #### Sharetask jvm
-        elif [ "$option" = "sharetask_jvm" ]
-        then
+        elif [ "$option" = "sharetask_jvm" ]; then
             checkValue "$value"
 
             sh scripts/env.sh SHARETASK_JVM "$value"
@@ -293,30 +272,26 @@ else
         fi
 
     ### Add
-    elif [ "$action" = "add" ]
-    then
+    elif [ "$action" = "add" ]; then
         checkEnv
         checkOption "$option"
 
         #### Volume
-        if [ "$option" = "volume" ]
-        then
+        if [ "$option" = "volume" ]; then
             checkValue "$arg1"
             checkValue "$arg2"
             checkValue "$arg3"
 
             sh scripts/volume.sh "$arg1" "$arg2" "$arg3"
-        
+
         ### DNS
-        elif [ "$option" = "dns" ]
-        then
+        elif [ "$option" = "dns" ]; then
             checkValue "$arg1"
 
             sh scripts/dns.sh "$arg1"
 
         ### Extra host
-        elif [ "$option" = "extra_host" ]
-        then
+        elif [ "$option" = "extra_host" ]; then
             checkValue "$arg1"
 
             sh scripts/extra_hosts.sh "$arg1"
@@ -327,21 +302,22 @@ else
         fi
 
     ### Database
-    elif [ "$action" = "database" ]
-    then
+    elif [ "$action" = "database" ]; then
         checkEnv
         checkOption "$option"
 
         #### Backup
-        if [ "$option" = "backup" ]
-        then
-            docker-compose run -e PGPASSWORD="password" database pg_dump -h database -U postgres tanatloc2 > "$DATABASE_BACKUP_PATH/dump-$(date +%Y-%m-%d).sql"
+        if [ "$option" = "backup" ]; then
+            docker-compose run -e PGPASSWORD="password" database pg_dump -h database -U postgres tanatloc2 >"$DATABASE_BACKUP_PATH/dump-$(date +%Y-%m-%d).sql"
+
+        #### Restore
+        elif [ "$option" = "restore" ]; then
+            checkValue "$value"
+            cat "$value" | docker-compose run -e PGPASSWORD="password" database psql -h database -U postgres
 
         #### Run
-        elif [ "$option" = "run" ]
-        then
+        elif [ "$option" = "run" ]; then
             docker-compose run database psql -U postgres -h database
-        
 
         #### Unknown
         else
@@ -349,38 +325,32 @@ else
         fi
 
     ### Data
-    elif [ "$action" = "data" ]
-    then
+    elif [ "$action" = "data" ]; then
         checkEnv
         checkOption "$option"
-        
+
         #### Backup
-        if [ "$option" = "backup" ]
-        then
+        if [ "$option" = "backup" ]; then
             docker run -v tanatloc-deploy_tanatlocData:/data -v "$STORAGE_BACKUP_PATH:/backup" ubuntu tar cvfP "/backup/backup-$(date +%Y-%m-%d).tar" /data
-        
+
         #### Run
-        elif [ "$option" = "run" ]
-        then
+        elif [ "$option" = "run" ]; then
             docker run -it -v tanatloc-deploy_tanatlocData:/data ubuntu /bin/bash
-        
+
         #### Unknown
         else
             error "Unknown option ${option}"
         fi
 
     ### Start
-    elif [ "$action" = "start" ]
-    then
+    elif [ "$action" = "start" ]; then
         #### Check env
-        if [ ! -f .env ]
-        then
+        if [ ! -f .env ]; then
             cp conf/default.conf .env
         fi
 
         #### Check nginx
-        if [ ! -f docker/run.nginx.conf ]
-        then
+        if [ ! -f docker/run.nginx.conf ]; then
             cp docker/nginx.conf docker/run.nginx.conf
         fi
 
@@ -388,27 +358,23 @@ else
         docker-compose -f docker-compose.yml -f docker-compose.volumes.yml -f docker-compose.dns.yml -f docker-compose.extra_hosts.yml up -d --remove-orphans
 
     ### Restart
-    elif [ "$action" = "restart" ]
-    then
+    elif [ "$action" = "restart" ]; then
         checkEnv
 
         docker-compose restart
 
     ### Stop
-    elif [ "$action" = "stop" ]
-    then
+    elif [ "$action" = "stop" ]; then
         checkEnv
 
         docker-compose down
 
     ### Update self
-    elif [ "$action" = "update-self" ]
-    then
+    elif [ "$action" = "update-self" ]; then
         git pull
 
     ### Update
-    elif [ "$action" = "update" ]
-    then
+    elif [ "$action" = "update" ]; then
         checkEnv
 
         docker-compose pull
@@ -416,27 +382,23 @@ else
         docker-compose -f docker-compose.yml -f docker-compose.volumes.yml -f docker-compose.dns.yml -f docker-compose.extra_hosts.yml up -d --remove-orphans
 
     ### Clean
-    elif [ "$action" = "clean" ]
-    then
+    elif [ "$action" = "clean" ]; then
         docker rmi "$(docker image ls --filter reference="tanatloc/tanatloc" --quiet | tail -n +2)"
         docker rmi "$(docker image ls --filter reference="postgres" --quiet | tail -n +2)"
         docker rmi "$(docker image ls --filter reference="nginx" --quiet | tail -n +2)"
 
     ### Renew
-    elif [ "$action" = "renew" ]
-    then
+    elif [ "$action" = "renew" ]; then
         checkOption "$option"
 
-        if [ "$option" = "certificate" ]
-        then
+        if [ "$option" = "certificate" ]; then
             sh scripts/cert-renew.sh
         fi
-        
+
     ### Help
-    elif [ "$action" = "help" ]
-    then
+    elif [ "$action" = "help" ]; then
         help
-        
+
     ### Error
     else
         error "Unknown action ${action}"

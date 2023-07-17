@@ -158,7 +158,7 @@ if [ -f .env ]; then
         fi
 
         # Remove spaces
-        line=$(echo "$line" | sed -e "s/ //g")
+        line=${line//[[:blank:]]/}
 
         # Skip UID
         if [ -z "${line##*UID=*}" ]; then
@@ -313,7 +313,7 @@ else
         #### Restore
         elif [ "$option" = "restore" ]; then
             checkValue "$value"
-            cat "$value" | docker-compose run -e PGPASSWORD="password" database psql -h database -U postgres
+            < "$value" docker-compose run -e PGPASSWORD="password" database psql -h database -U postgres
 
         #### Run
         elif [ "$option" = "run" ]; then

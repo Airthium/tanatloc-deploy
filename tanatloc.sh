@@ -158,7 +158,7 @@ if [ -f .env ]; then
         fi
 
         # Remove spaces
-        line=${line//[[:blank:]]/}
+        line=$(echo "$line" | sed -e "s/ //g")
 
         # Skip UID
         if [ -z "${line##*UID=*}" ]; then

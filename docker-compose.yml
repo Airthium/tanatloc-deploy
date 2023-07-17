@@ -32,7 +32,7 @@ services:
         target: /home/app/tanatloc
 
   network:
-    image: nginx:1.23
+    image: nginx:1.25
     restart: always
     depends_on:
       - tanatloc

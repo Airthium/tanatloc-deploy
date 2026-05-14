@@ -1,6 +1,6 @@
 services:
   database:
-    image: postgres:17
+    image: postgres:18
     restart: always
     environment:
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
@@ -32,7 +32,7 @@ services:
         target: /home/app/tanatloc
 
   network:
-    image: nginx:1.27
+    image: nginx:1.31
     restart: always
     depends_on:
       - tanatloc
